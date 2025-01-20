@@ -81,8 +81,6 @@ macro_rules! target_filter {
     }};
 }
 
-use std::collections::HashMap;
-
 #[macro_export]
 macro_rules! bundle_enchants {
     ($($enchant:expr),* $(,)?) => {{
@@ -95,3 +93,122 @@ macro_rules! bundle_enchants {
     }};
 }
 
+#[macro_export]
+macro_rules! wrap_box {
+    ($value:expr) => {
+        Box::new($value)
+    };
+}
+
+#[macro_export]
+macro_rules! wrap_arc {
+    ($value:expr) => {
+        Arc::new($value)
+    };
+}
+
+#[macro_export]
+macro_rules! execute_chain {
+    // Base case - run command
+    (run $cmd:expr) => {
+        ExecuteSubCommand::RUN($crate::wrap_arc!($cmd))
+    };
+
+    // Recursive cases with subcommands
+    (align $axis:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::ALIGN(
+            $axis.to_string(),
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (anchored $anchor:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::ANCHORED(
+            $anchor,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (as $target:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::AS(
+            $target,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (at $target:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::AT(
+            $target,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (facing $pos:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::FACING(
+            $pos,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (in $dim:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::IN(
+            $crate::wrap_arc!($dim),
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (on $rel:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::ON(
+            $rel,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (positioned $pos:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::POSITIONED(
+            $pos,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (rotated $rot:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::ROTATED(
+            $rot,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (store $action:expr, $command:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::STORE(
+            $action,
+            $command,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    // These don't take a next command in the new enum
+    (summon $entity:expr) => {
+        ExecuteSubCommand::SUMMON($entity)
+    };
+
+    (if $category:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::IF(
+            $category,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+
+    (unless $category:expr => $($rest:tt)+) => {
+        ExecuteSubCommand::UNLESS(
+            $category,
+            $crate::wrap_box!($crate::execute_chain!($($rest)+))
+        )
+    };
+}
+
+#[macro_export]
+macro_rules! execute {
+    ($($tokens:tt)+) => {
+        Execute($crate::execute_chain!($($tokens)+))
+    };
+}

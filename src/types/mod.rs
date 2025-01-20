@@ -7,6 +7,7 @@ pub mod text;
 pub mod permissions;
 pub mod combat;
 pub mod item;
+pub mod team;
 
 pub use experience::*;
 pub use selector::*;
@@ -17,3 +18,4 @@ pub use text::*;
 pub use permissions::*;
 pub use combat::*;
 pub use item::*;
+pub use team::*;

@@ -1,6 +1,87 @@
 pub type PlayerName = String;
 pub type TickDuration = String;
 
+pub trait MinecraftDimension: ToString + std::fmt::Debug {
+    fn namespace(&self) -> String;
+    fn name(&self) -> String;
+}
+
+
+#[derive(Debug, Clone)]
+pub enum Yaw {
+    NORTH,
+    NORTHEAST,
+    NORTHWEST,
+    SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
+    EAST,
+    WEST,
+    Custom(f32),
+}
+
+impl ToString for Yaw {
+    fn to_string(&self) -> String {
+        match self {
+            Self::NORTH => "-180.0".to_string(),
+            Self::EAST => "-90.0".to_string(),
+            Self::WEST => "90.0".to_string(),
+            Self::SOUTH => "180.0".to_string(),
+            Self::NORTHEAST => "45.0".to_string(), 
+            Self::NORTHWEST => "-45.0".to_string(),
+            Self::SOUTHEAST => "225.0".to_string(),
+            Self::SOUTHWEST => "-135.0".to_string(), 
+            Self::Custom(value) => format!("{value}"),
+        }
+    }
+}
+            
+#[derive(Debug, Clone)]
+pub enum MinecraftDimensions {
+    Overworld,
+    Nether,
+    End,
+}
+
+#[derive(Debug, Clone)]
+pub enum HeightMap {
+    WorldSurface,
+    MotionBlocking,
+    MotionBlockingNoLeaves,
+    OceanFloor,
+}
+
+impl ToString for HeightMap {
+    fn to_string(&self) -> String {
+        match self {
+            HeightMap::WorldSurface => "world_surface".to_string(),
+            HeightMap::MotionBlocking => "motion_blocking".to_string(),
+            HeightMap::MotionBlockingNoLeaves => "motion_blocking_no_leaves".to_string(),
+            HeightMap::OceanFloor => "ocean_floor".to_string(),
+        }
+    }
+}
+
+impl ToString for MinecraftDimensions {
+    fn to_string(&self) -> String {
+        format!("{}:{}", self.namespace(), self.name())
+    }
+}
+
+impl MinecraftDimension for MinecraftDimensions {
+    fn namespace(&self) -> String {
+        "minecraft".to_string()
+    }
+    
+    fn name(&self) -> String {
+        match self {
+            MinecraftDimensions::Overworld => "overworld".to_string(),
+            MinecraftDimensions::Nether => "nether".to_string(),
+            MinecraftDimensions::End => "the_end".to_string(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum GameRuleValue {
     Bool(bool),
@@ -225,6 +306,12 @@ pub struct Location {
     pub x: f32,
     pub y: f32,
     pub z: f32,
+}
+
+impl Location {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self { x, y, z }
+    }
 }
 
 impl ToString for Location {

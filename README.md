@@ -20,7 +20,7 @@ This library provides Rust implementations of Minecraft commands. Below is the s
 - [x] /difficulty
 - [ ] /effect
 - [x] /enchant
-- [ ] /execute
+- [x] /execute
 - [ ] /experience
 - [x] /fill
 - [ ] /fillbiome
@@ -67,7 +67,7 @@ This library provides Rust implementations of Minecraft commands. Below is the s
 - [ ] /stopsound
 - [ ] /summon
 - [x] /tag
-- [ ] /team
+- [x] /team
 - [ ] /teammsg
 - [x] /teleport/tp
 - [ ] /tell

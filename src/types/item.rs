@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone, Default)]
 pub struct ItemState {
-    pub enchantments: Option<EnchantmentLevels>,
+    pub enchantments: Option<ItemEnchantments>,
     pub potion_contents: Option<PotionContents>,
     pub can_place_on: Option<Vec<String>>,
     pub can_break: Option<Vec<String>>,
@@ -110,9 +110,7 @@ impl ToString for ItemDisplay {
 }
 
 #[derive(Debug, Clone)]
-pub struct EnchantmentLevels {
-    pub levels: HashMap<String, u32>,
-}
+pub struct ItemEnchantments(pub HashMap<String, u32>);
 
 #[derive(Debug, Clone)]
 pub struct PotionContents {
@@ -147,7 +145,7 @@ impl ToString for ItemState {
 
         // Always add attributes in a consistent order
         if let Some(enchants) = &self.enchantments {
-            let mut sorted_enchants: Vec<_> = enchants.levels.iter().collect();
+            let mut sorted_enchants: Vec<_> = enchants.0.iter().collect();
             sorted_enchants.sort_by_key(|k| k.0); // Sort by enchantment name
             let enchant_str = sorted_enchants
                 .iter()

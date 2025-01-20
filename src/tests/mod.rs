@@ -17,6 +17,8 @@ pub mod difficulty;
 #[cfg(test)]
 pub mod enchant;
 #[cfg(test)]
+pub mod execute;
+#[cfg(test)]
 pub mod fill;
 #[cfg(test)]
 pub mod gamemode;
@@ -38,6 +40,8 @@ pub mod scoreboard;
 pub mod setblock;
 #[cfg(test)]
 pub mod tag;
+#[cfg(test)]
+pub mod team;
 #[cfg(test)]
 pub mod teleport;
 #[cfg(test)]

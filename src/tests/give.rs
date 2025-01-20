@@ -5,8 +5,7 @@ use crate::{
     commands::Give,
     prelude::Enchantments,
     types::{
-        Effect, EnchantmentLevels, ItemDisplay, ItemState, LoreItem, MiningRule, PotionContents,
-        TargetSelector, ToolProperties,
+        Effect, ItemDisplay, ItemEnchantments, ItemState, LoreItem, MiningRule, PotionContents, TargetSelector, ToolProperties
     },
 };
 
@@ -50,7 +49,7 @@ async fn ultimate_sword() {
                 ]),
                 ..Default::default()
             }),
-            enchantments: Some(EnchantmentLevels { levels: enchants }),
+            enchantments: Some(ItemEnchantments(enchants)),
             max_damage: Some(2000),
             damage: Some(10),
             ..Default::default()
@@ -109,9 +108,7 @@ async fn adventure_mode_pickaxe() {
         TargetSelector::Current(None),
         "minecraft:netherite_pickaxe".to_string(),
         Some(ItemState {
-            enchantments: Some(EnchantmentLevels {
-                levels: tool_enchants,
-            }),
+            enchantments: Some(ItemEnchantments(tool_enchants)),
             can_break: Some(vec![
                 "minecraft:diamond_ore".to_string(),
                 "minecraft:ancient_debris".to_string(),
@@ -152,9 +149,7 @@ async fn complex_splash_potion() {
         TargetSelector::Random(None),
         "minecraft:splash_potion".to_string(),
         Some(ItemState {
-            enchantments: Some(EnchantmentLevels {
-                levels: potion_enchants,
-            }),
+            enchantments: Some(ItemEnchantments(potion_enchants)),
             potion_contents: Some(PotionContents {
                 potion: None,
                 custom_effects: Some(vec![
