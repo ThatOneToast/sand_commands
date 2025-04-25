@@ -1,11 +1,20 @@
-use crate::components::nbt::block_entity_format::{BlockEntityBase, Item, LootableData};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone)]
+use crate::components::nbt::block_entity_format::{BlockEntityBase, ItemBase, LootableData};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrappedChest {
     pub base: BlockEntityBase,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lock: Option<String>,
     pub lootable_data: LootableData,
-    pub items: Vec<Item>,
-    pub gold: Option<i8>, // April fools snapshot 23w13a_or_b
+    pub items: Vec<ItemBase>,
+}
+
+impl ToString for TrappedChest {
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).expect("Failed to serialize TrappedChest to JSON")
+    }
 }

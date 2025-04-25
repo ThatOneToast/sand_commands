@@ -1,6 +1,8 @@
-use crate::components::nbt::block_entity_format::{BlockEntityBase, Item};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone)]
+use crate::components::nbt::block_entity_format::{BlockEntityBase, ItemBase};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Vault {
     pub base: BlockEntityBase,
     pub config: VaultConfig,
@@ -8,26 +10,53 @@ pub struct Vault {
     pub shared_data: VaultSharedData,
 }
 
-#[derive(Debug, Clone)]
+impl ToString for Vault {
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).expect("Failed to serialize Vault to JSON")
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VaultConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub loot_table: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub override_loot_table_to_display: Option<String>,
-    pub activation_range: f64,
-    pub deactivation_range: f64,
-    pub key_item: Item,
+    pub activation_range: f32,
+    pub deactivation_range: f32,
+    pub key_item: ItemBase,
 }
 
-#[derive(Debug, Clone)]
+impl ToString for VaultConfig {
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).expect("Failed to serialize VaultConfig to JSON")
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VaultServerData {
-    pub rewarded_players: Vec<[i32; 4]>, // UUIDs as arrays
-    pub state_updating_resumes_at: i64,
-    pub items_to_eject: Vec<Item>,
-    pub total_ejections_needed: i32,
+    pub rewarded_players: Vec<[u32; 4]>, // UUIDs as arrays
+    pub state_updating_resumes_at: u32,
+    pub items_to_eject: Vec<ItemBase>,
+    pub total_ejections_needed: u32,
 }
 
-#[derive(Debug, Clone)]
+impl ToString for VaultServerData {
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).expect("Failed to serialize VaultServerData to JSON")
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VaultSharedData {
-    pub display_item: Option<Item>,
-    pub connected_players: Vec<[i32; 4]>, // UUIDs as arrays
-    pub connected_particles_range: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_item: Option<ItemBase>,
+    pub connected_players: Vec<[u32; 4]>, // UUIDs as arrays
+    pub connected_particles_range: f32,
+}
+
+impl ToString for VaultSharedData {
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).expect("Failed to serialize VaultSharedData to JSON")
+    }
 }

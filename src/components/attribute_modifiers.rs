@@ -1,6 +1,8 @@
-use super::{Component, ComponentSlot};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug)]
+use super::ComponentSlot;
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AttributeModifier {
     pub attribute_type: Attribute,
     pub slot: ComponentSlot,
@@ -20,9 +22,8 @@ impl ToString for AttributeModifier {
     }
 }
 
-impl Component for AttributeModifier {}
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AttributeModifiers(pub Vec<AttributeModifier>);
 
 impl ToString for AttributeModifiers {
@@ -37,7 +38,7 @@ impl ToString for AttributeModifiers {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Attribute {
     MaxHealth,
     MaxAbsorption,
@@ -112,7 +113,7 @@ impl ToString for Attribute {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum ModifierOperation {
     AddValue,
     AddMultipliedBase,

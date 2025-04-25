@@ -1,7 +1,8 @@
-use super::Component;
+use serde::{Deserialize, Serialize};
 
 
-#[derive(Clone, Debug)]
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BaseColor {
     pub color: String,
 }
@@ -13,4 +14,3 @@ impl ToString for BaseColor {
     }
 }
 
-impl Component for BaseColor {}

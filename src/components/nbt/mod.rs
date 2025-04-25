@@ -1,7 +1,9 @@
 pub mod block_entity_format;
 pub mod entity_format;
 
-#[derive(Debug, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Looking {
     NORTH,
     EAST,
@@ -24,7 +26,7 @@ impl Looking {
     }
     
     pub fn from_value(value: impl Into<u8>) -> Option<Self> {
-        match value {
+        match value.into() {
             2 => Some(Self::NORTH),
             5 => Some(Self::EAST),
             3 => Some(Self::SOUTH),

@@ -1,6 +1,7 @@
-use super::Component;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum BannerPatternType {
     FieldMasoned,
     BordureIndented,
@@ -32,7 +33,7 @@ impl ToString for BannerPatternType {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BannerPattern {
     pub pattern: BannerPatternType,
     pub color: String,
@@ -46,9 +47,8 @@ impl ToString for BannerPattern {
     }
 }
 
-impl Component for BannerPattern {}
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BannerPatterns(pub Vec<BannerPattern>);
 
 impl ToString for BannerPatterns {

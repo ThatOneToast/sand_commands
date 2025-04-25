@@ -1,6 +1,8 @@
-use super::{nbt::entity_format::EntityData, Component};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug)]
+use super::nbt::entity_format::EntityData;
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Bee {
     pub entity_data: EntityData,
     pub min_ticks_in_hive: u32,
@@ -16,9 +18,8 @@ impl ToString for Bee {
     }
 }
 
-impl Component for Bee {}
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Bees(pub Vec<Bee>);
 
 impl ToString for Bees {

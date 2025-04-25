@@ -4,7 +4,11 @@ pub mod attribute_modifiers;
 pub mod banner_patterns;
 pub mod base_color;
 pub mod bees;
+pub mod block_entity_data;
 
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DataComponents {
     AttributeModifiers(attribute_modifiers::AttributeModifiers),
     BannerPatterns(banner_patterns::BannerPatterns),
@@ -13,7 +17,7 @@ pub enum DataComponents {
 }
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum ComponentSlot {
     ANY,
     HAND,
